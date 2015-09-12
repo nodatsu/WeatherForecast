@@ -20,14 +20,19 @@ public class MainActivity extends Activity {
 
         textView = (TextView) findViewById(R.id.tv_main);
 
-        try {
-            String data = WeatherAPI.getWeather(this, "400040");
-            textView.setText(data);
-        }
-        catch (IOException e){
-            Toast.makeText(this, "IOException is occurred", Toast.LENGTH_SHORT).show();
-        }
-
+        Thread thread = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    String data = WeatherAPI.getWeather(MainActivity.this, "400040");
+                    textView.setText(data);
+                }
+                catch (IOException e){
+                    Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+        thread.start();
     }
 
     @Override
