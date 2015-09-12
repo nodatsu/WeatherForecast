@@ -4,14 +4,30 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+import android.widget.Toast;
 
+import java.io.IOException;
 
 public class MainActivity extends Activity {
+
+    private TextView textView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        textView = (TextView) findViewById(R.id.tv_main);
+
+        try {
+            String data = WeatherAPI.getWeather(this, "400040");
+            textView.setText(data);
+        }
+        catch (IOException e){
+            Toast.makeText(this, "IOException is occurred", Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     @Override
