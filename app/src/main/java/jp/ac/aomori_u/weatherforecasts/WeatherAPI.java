@@ -16,7 +16,7 @@ import java.io.InputStreamReader;
 
 public class WeatherAPI {
     private static final String USER_AGENT = "WeatherForecasts Sample";
-    private static final String URL = "http://weather.livedoor.com/forecast/webservice/jason/v1?city=";
+    private static final String URL = "http://weather.livedoor.com/forecast/webservice/json/v1?city=";
 
     public static String getWeather(Context context, String pointID) throws IOException {
         AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT, context);
