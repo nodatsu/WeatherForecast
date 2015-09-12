@@ -10,30 +10,31 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import java.net.HttpURLConnection;
+import java.net.URL;
+
 /**
  * Created by tsunoda on 15/09/12.
  */
 
 public class WeatherAPI {
     private static final String USER_AGENT = "WeatherForecasts Sample";
-    private static final String URL = "http://weather.livedoor.com/forecast/webservice/json/v1?city=";
+    private static final String URL_WF = "http://weather.livedoor.com/forecast/webservice/json/v1?city=";
 
     public static String getWeather(Context context, String pointID) throws IOException {
-        AndroidHttpClient client = AndroidHttpClient.newInstance(USER_AGENT, context);
-        HttpGet get = new HttpGet(URL + pointID);
+        URL url = new URL(URL_WF + pointID);
 
         StringBuilder sb = new StringBuilder();
         try {
-            HttpResponse response = client.execute(get);
-            BufferedReader br = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+            HttpURLConnection con = (HttpURLConnection)url.openConnection();
+            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
             String line = null;
             while ((line = br.readLine()) != null) {
                 sb.append(line);
             }
+            con.disconnect();
         }
-        finally {
-                client.close();
-        }
+        catch (Exception e) {}
 
         return sb.toString();
     }

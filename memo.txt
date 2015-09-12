@@ -1,0 +1,8 @@
+AndroidのHTTP通信
+
+	org.apache.http は5.1から非推奨
+	java.net.HttpURLConnection を使え
+
+	(参考) Android : Deprecated HTTP Classes on Android5.1
+	http://yuki312.blogspot.jp/2015/03/android-deprecated-http-classes-on.html
+
