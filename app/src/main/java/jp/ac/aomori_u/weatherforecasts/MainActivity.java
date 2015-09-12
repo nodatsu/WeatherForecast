@@ -1,51 +1,43 @@
 package jp.ac.aomori_u.weatherforecasts;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.os.Handler;
-
-import java.io.IOException;
 
 public class MainActivity extends Activity {
 
     private TextView textView;
-    private Handler handler;
+
+    private class GetWeatherTask extends GetWeatherAPITask {
+        public GetWeatherTask(Context context) {
+            super(context);
+        }
+
+        @Override
+        protected void onPostExecute(String data) {
+            super.onPostExecute(data);
+
+            if (data != null) {
+                textView.setText(data);
+            }
+            else if (exception != null) {
+                Toast.makeText(MainActivity.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        handler = new Handler();
         textView = (TextView) findViewById(R.id.tv_main);
 
-        Thread thread = new Thread() {
-            @Override
-            public void run() {
-            try {
-                final String data = WeatherAPI.getWeather(MainActivity.this, "400040");
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textView.setText(data);
-                    }
-                });
-            }
-            catch (final IOException e){
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-            }
-        };
-        thread.start();
+        new GetWeatherTask(this).execute("400040");
     }
 
     @Override
