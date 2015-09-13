@@ -7,9 +7,11 @@ package jp.ac.aomori_u.weatherforecasts;
 import android.content.Context;
 import android.os.AsyncTask;
 
+import org.json.JSONException;
+
 import java.io.IOException;
 
-public class GetWeatherAPITask extends AsyncTask<String, Void, String> {
+public class GetWeatherAPITask extends AsyncTask<String, Void, WeaterForecasts> {
     private final Context context;
     Exception exception;
 
@@ -18,11 +20,14 @@ public class GetWeatherAPITask extends AsyncTask<String, Void, String> {
     }
 
     @Override
-    protected String doInBackground(String... params) {
+    protected WeaterForecasts doInBackground(String... params) {
         try {
             return WeatherAPI.getWeather(context, params[0]);
         }
         catch (IOException e) {
+            this.exception = e;
+        }
+        catch (JSONException e) {
             this.exception = e;
         }
         return null;

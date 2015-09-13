@@ -1,10 +1,9 @@
 package jp.ac.aomori_u.weatherforecasts;
 
 import android.content.Context;
-import android.net.http.AndroidHttpClient;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpGet;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,7 +20,7 @@ public class WeatherAPI {
     private static final String USER_AGENT = "WeatherForecasts Sample";
     private static final String URL_WF = "http://weather.livedoor.com/forecast/webservice/json/v1?city=";
 
-    public static String getWeather(Context context, String pointID) throws IOException {
+    public static WeaterForecasts getWeather(Context context, String pointID) throws IOException, JSONException {
         URL url = new URL(URL_WF + pointID);
 
         StringBuilder sb = new StringBuilder();
@@ -36,7 +35,6 @@ public class WeatherAPI {
         }
         catch (Exception e) {}
 
-        return sb.toString();
+        return new WeaterForecasts(new JSONObject(sb.toString()));
     }
-
 }
